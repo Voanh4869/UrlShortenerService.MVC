@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using QRCoder;
 using System;
 using System.IO;
@@ -50,20 +50,22 @@ namespace UrlShortenerService.MVC.Controllers
                 shortCode = GenerateShortCode();
             }
 
+            // Build short URL
+            var host = " https://roiliest-troublingly-vincenza.ngrok-free.dev";
+            string shortUrl = $"{host}/{shortCode}";
+
             var entity = new ShortUrl
             {
                 OriginalUrl = originalUrl,
                 ShortCode = shortCode,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                ShortLink = shortUrl,
             };
 
             _db.ShortUrls.Add(entity);
             await _db.SaveChangesAsync();
 
-            // Build short URL
-            var host = $"{Request.Scheme}://{Request.Host}";
-            string shortUrl = $"{host}/{shortCode}";
-
+          
             // ✅ Generate QR Code for short URL
             using var qrGenerator = new QRCodeGenerator();
             using var qrData = qrGenerator.CreateQrCode(shortUrl, QRCodeGenerator.ECCLevel.Q);
