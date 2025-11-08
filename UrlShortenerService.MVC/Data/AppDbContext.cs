@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UrlShortenerService.MVC.Data.Entities;
 using System;
+using UrlShortenerService.MVC.Common;
 
 namespace UrlShortenerService.MVC.Data
 {
@@ -30,42 +31,22 @@ namespace UrlShortenerService.MVC.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ShortUrl>().ToTable("ShortUrls");
+            // Ràng buộc độ dài cho cột Name
+            modelBuilder.Entity<ShortUrl>()
+                .Property(p => p.OriginalUrl)
+                .HasMaxLength(MaxLengthConfig.ORIGIN_URL)
+                .IsRequired();
 
-            modelBuilder.Entity<ShortUrl>(entity =>
-            {
-                entity.HasKey(e => e.Id);
+            modelBuilder.Entity<ShortUrl>()
+                .Property(p => p.ShortCode)
+                .HasMaxLength(MaxLengthConfig.SHORTENED_URL);
 
-                entity.Property(e => e.OriginalUrl)
-                      .HasMaxLength(2048)
-                      .IsRequired();
+            modelBuilder.Entity<ShortUrl>()
+                .Property(p => p.CreatedAt)
+                .HasColumnType("datetime");
 
-                entity.Property(e => e.ShortCode)
-                      .HasMaxLength(50);
-                      //.IsRequired();
-
-                entity.Property(e => e.CreatedAt)
-                      .HasDefaultValueSql("GETUTCDATE()")
-                      .IsRequired();
-            });
-
-            // Sample seed data
-            //modelBuilder.Entity<ShortUrl>().HasData(
-            //    new ShortUrl
-            //    {
-            //        Id = 1,
-            //        OriginalUrl = "https://www.microsoft.com",
-            //        ShortCode = "msft2025",
-            //        CreatedAt = new DateTime(2025, 11, 6, 7, 44, 28, DateTimeKind.Utc)
-            //    },
-            //    new ShortUrl
-            //    {
-            //        Id = 2,
-            //        OriginalUrl = "https://www.github.com",
-            //        ShortCode = "gh2025",
-            //        CreatedAt = new DateTime(2025, 11, 6, 7, 44, 29, DateTimeKind.Utc)
-            //    }
-            //);
         }
+
     }
 }
+
