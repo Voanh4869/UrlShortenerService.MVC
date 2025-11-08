@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "URL Shortener";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- === LEFT SIDE: URL Shortener Form === -->
+        <div class="col-md-6">
+            <div class="card custom-border">
+                <div class="card-body p-4">
+                    <h2 class="mb-3 text-primary">🔗 URL Shortener</h2>
+                    <p class="text-muted">Paste a long URL below to generate a short link.</p>
+                    <hr />
+
+                    <form asp-controller="UrlShortener" asp-action="Shorten" method="post" class="mt-3">
+                        <div class="mb-3">
+                            <label for="originalUrl" class="form-label">Enter URL:</label>
+                            <input type="url" name="originalUrl" id="originalUrl"
+                                   class="form-control form-control-lg"
+                                   placeholder="https://example.com" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Shorten URL
+                        </button>
+                    </form>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3">@ViewBag.Error</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- === RIGHT SIDE: Recent Shortened URLs (ViewComponent) === -->
+        <div class="col-md-6">
+            @await Component.InvokeAsync("UrlShortenList", new { top = 10 })
+        </div>
+    </div>
+</div>
