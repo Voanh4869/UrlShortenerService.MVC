@@ -1,0 +1,35 @@
+﻿@model UrlShortenerService.MVC.ViewModels.Identities.RegisterConfirmationVM
+@{
+    ViewData["Title"] = "Register Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Registration Confirmation</h1>
+
+@if (Model.DisplayConfirmAccountLink)
+{
+    <p>You just created an account using this email: <strong>@Model.Email</strong></p>
+    <p>Click the button below to confirm your registration.</p>
+
+    <div class="col-md-12">
+        <form id="registerConfirmationForm"
+              asp-controller="Authentication"
+              asp-action="RegisterConfirmation"
+              method="post">
+
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <input asp-for="ReturnUrl" type="hidden" />
+            <input asp-for="Email" type="hidden" />
+            <input asp-for="Code" type="hidden" />
+            <input asp-for="UserId" type="hidden" />
+
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Confirm</button>
+        </form>
+    </div>
+}
+else
+{
+    <p>Please check your email to confirm your account.</p>
+}
