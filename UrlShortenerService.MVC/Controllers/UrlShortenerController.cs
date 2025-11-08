@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QRCoder;
 using System;
@@ -11,6 +12,7 @@ using UrlShortenerService.MVC.ViewModels;
 namespace UrlShortenerService.MVC.Controllers
 {
     //[Route("UrlShortener")]
+    [Authorize]
     public class UrlShortenerController : Controller
     {
         private readonly AppDbContext _db;
@@ -98,7 +100,7 @@ namespace UrlShortenerService.MVC.Controllers
             return View("~/Views/Home/Result.cshtml", vm);
         }
 
-        
+        [AllowAnonymous]
         [HttpGet("{shortCode}")]
         public IActionResult RedirectToOriginal(string shortCode)
         {
