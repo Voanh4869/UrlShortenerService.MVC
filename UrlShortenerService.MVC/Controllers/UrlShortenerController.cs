@@ -53,7 +53,8 @@ namespace UrlShortenerService.MVC.Controllers
             }
 
             // Build short URL
-            var host = " https://roiliest-troublingly-vincenza.ngrok-free.dev";
+            // var host = " https://roiliest-troublingly-vincenza.ngrok-free.dev"; // domain chính dùng để chạy online
+             var host = $"{Request.Scheme}://{Request.Host}"; // dùng để chạy local
             string shortUrl = $"{host}/{shortCode}";
 
             var entity = new ShortUrl
